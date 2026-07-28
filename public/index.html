@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HANGAR | Voice Capture Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/style.css">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "inverse-primary": "#4d661c",
+          "error": "#ffb4ab",
+          "surface-dim": "#0b1326",
+          "secondary-container": "#3e495d",
+          "on-tertiary-container": "#c22229",
+          "on-secondary-fixed-variant": "#3c475a",
+          "tertiary-fixed-dim": "#ffb3ad",
+          "secondary-fixed-dim": "#bcc7de",
+          "tertiary": "#ffffff",
+          "on-error-container": "#ffdad6",
+          "surface-container-lowest": "#060e20",
+          "surface-container-high": "#222a3d",
+          "inverse-on-surface": "#283044",
+          "surface-tint": "#b3d17a",
+          "surface": "#0b1326",
+          "primary": "#ffffff",
+          "on-primary-fixed-variant": "#364e03",
+          "surface-container": "#171f33",
+          "primary-fixed": "#ceee93",
+          "on-tertiary-fixed": "#410004",
+          "outline-variant": "#44483b",
+          "on-surface": "#dae2fd",
+          "error-container": "#93000a",
+          "on-tertiary-fixed-variant": "#930013",
+          "tertiary-container": "#ffdad7",
+          "on-error": "#690005",
+          "secondary-fixed": "#d8e3fb",
+          "background": "#0b1326",
+          "on-tertiary": "#68000a",
+          "on-primary-container": "#536d22",
+          "on-primary": "#243600",
+          "surface-variant": "#2d3449",
+          "on-primary-fixed": "#131f00",
+          "surface-bright": "#31394d",
+          "outline": "#8f9282",
+          "surface-container-highest": "#2d3449",
+          "primary-fixed-dim": "#b3d17a",
+          "on-secondary-fixed": "#111c2d",
+          "on-background": "#dae2fd",
+          "primary-container": "#ceee93",
+          "secondary": "#bcc7de",
+          "on-surface-variant": "#c5c8b7",
+          "surface-container-low": "#131b2e",
+          "on-secondary-container": "#aeb9d0",
+          "tertiary-fixed": "#ffdad7",
+          "on-secondary": "#263143",
+          "inverse-surface": "#dae2fd"
+        },
+        borderRadius: {
+          DEFAULT: "0.125rem",
+          lg: "0.25rem",
+          xl: "0.5rem",
+          full: "0.75rem"
+        },
+        spacing: {
+          "container-max": "1280px",
+          unit: "4px",
+          gutter: "24px",
+          "margin-mobile": "16px",
+          "margin-desktop": "40px"
+        },
+        fontFamily: {
+          "body-md": ["Hanken Grotesk"],
+          "body-lg": ["Hanken Grotesk"],
+          "label-caps": ["JetBrains Mono"],
+          "headline-md": ["Hanken Grotesk"],
+          "data-mono": ["JetBrains Mono"],
+          "headline-lg": ["Hanken Grotesk"]
+        },
+        fontSize: {
+          "body-md": ["16px", {lineHeight: "24px", fontWeight: "400"}],
+          "body-lg": ["18px", {lineHeight: "28px", fontWeight: "400"}],
+          "label-caps": ["14px", {lineHeight: "20px", letterSpacing: "0.05em", fontWeight: "600"}],
+          "headline-md": ["24px", {lineHeight: "32px", fontWeight: "600"}],
+          "data-mono": ["15px", {lineHeight: "20px", fontWeight: "500"}],
+          "headline-lg": ["32px", {lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700"}]
+        }
+      },
+    },
+  }
+</script>
+<style>
+  body {
+    background-color: #0b1326;
+    color: #dae2fd;
+    -webkit-font-smoothing: antialiased;
+  }
+  .industrial-inset {
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+  }
+  .mic-pulse {
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(206, 238, 147, 0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(206, 238, 147, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(206, 238, 147, 0); }
+  }
+  .active-glow {
+    border-color: #ceee93 !important;
+    box-shadow: 0 0 12px rgba(206, 238, 147, 0.2);
+  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+</style>
+<base target="_blank">
+</head>
+<body class="font-body-md text-body-md overflow-hidden h-screen flex flex-col">
+
+<!-- Top Header Shell -->
+<header class="bg-surface border-b border-outline-variant flex justify-between items-center px-margin-desktop py-4 w-full z-50">
+  <div class="flex items-center gap-12">
+    <div class="flex items-center gap-2">
+      <div class="w-4 h-4 bg-primary-fixed"></div>
+      <h1 class="font-label-caps text-label-caps tracking-widest text-primary">HANGAR</h1>
+    </div>
+    </div>
+  <div class="flex gap-2 items-center who">
+    <input id="mechName" class="bg-surface-container-low border border-outline-variant rounded-sm px-3 py-1.5 font-data-mono text-xs focus:border-primary-fixed focus:ring-0 w-40 transition-all placeholder:text-on-surface-variant/40" placeholder="Your name" type="text" autocomplete="name"/>
+    <input id="certType" class="bg-surface-container-low border border-outline-variant rounded-sm px-3 py-1.5 font-data-mono text-xs focus:border-primary-fixed focus:ring-0 w-24 transition-all placeholder:text-on-surface-variant/40" placeholder="A&amp;P" type="text" autocomplete="off"/>
+    <input id="certNumber" class="bg-surface-container-low border border-outline-variant rounded-sm px-3 py-1.5 font-data-mono text-xs focus:border-primary-fixed focus:ring-0 w-40 transition-all placeholder:text-on-surface-variant/40" placeholder="Certificate #" type="text" autocomplete="off"/>
+  </div>
+</header>
+
+<div class="flex flex-1 overflow-hidden">
+  <!-- Side Navigation Bar -->
+  <aside class="w-64 bg-surface-container border-r border-outline-variant flex flex-col z-40">
+    <div class="p-6">
+      <div class="flex items-center gap-3 mb-6 bg-surface-container-low p-3 rounded-lg border border-outline-variant/30">
+        <div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center">
+          <span class="material-symbols-outlined text-on-secondary-container">person</span>
+        </div>
+        <div>
+          <p class="font-data-mono text-sm font-bold text-primary">Tech ID: 4429</p>
+          <p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">A&amp;P Certified</p>
+        </div>
+      </div>
+    </div>
+    <nav class="flex flex-col gap-1 px-2 flex-grow">
+      <a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-sm border-r-4 border-primary-fixed-dim transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">mic</span>
+        <span class="font-label-caps text-xs">Voice Entry</span>
+      </a>
+    </nav>
+    <div class="p-4 mt-auto">
+      <button id="signLogbook" class="w-full py-3 bg-primary-container text-on-primary-container font-label-caps text-xs rounded-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:brightness-100" type="button" disabled>
+        <span class="material-symbols-outlined text-sm">edit_square</span>
+        Sign Logbook
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Canvas -->
+  <main class="flex-1 overflow-y-auto no-scrollbar bg-surface-dim">
+    <div class="max-w-[1000px] mx-auto w-full px-margin-desktop py-12 flex flex-col gap-16">
+
+      <!-- Voice Capture Area (Top Center) -->
+      <section class="flex flex-col items-center gap-8 text-center pt-8 capture">
+        <div class="relative group">
+          <button class="w-44 h-44 rounded-xl border border-outline-variant bg-surface-container-high flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:border-primary-fixed active:scale-95 group industrial-inset" id="mic" type="button">
+            <div class="p-4 rounded bg-surface-variant group-active:bg-primary-fixed group-active:text-on-primary transition-colors">
+              <span class="material-symbols-outlined text-3xl" id="mic-icon">mic</span>
+            </div>
+            <span class="font-label-caps text-[10px] tracking-widest text-on-surface-variant group-active:text-primary" id="micLabel">HOLD TO TALK</span>
+          </button>
+          <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 transition-opacity font-data-mono text-[10px] text-primary-fixed uppercase" id="recording-status">Recording Active...</div>
+        </div>
+
+        <div class="w-full max-w-2xl flex flex-col items-center gap-6">
+          <p class="text-on-surface-variant font-body-md text-sm leading-relaxed max-w-lg hint" id="hint">
+            Say what you did. Tail number, work performed, torque, parts, times.
+          </p>
+          <div class="w-full relative">
+            <textarea class="w-full h-44 bg-surface-container-low border border-outline-variant rounded p-6 font-data-mono text-sm focus:border-primary-fixed focus:ring-0 industrial-inset transition-colors resize-none placeholder:text-on-surface-variant/20 leading-relaxed"
+              id="transcript"
+              rows="3"
+              placeholder='...or type it: "Replaced left main tire on November one two three alpha bravo, torqued axle nut to 150 inch-pounds, tach 2418.6"'></textarea>
+          </div>
+          <div class="flex gap-4 capture-actions">
+            <button class="px-8 py-2.5 bg-primary-fixed text-on-primary-fixed font-label-caps text-xs rounded-sm hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 shadow-lg shadow-primary-fixed/10 primary" id="submit" type="button">
+              <span class="material-symbols-outlined text-sm">auto_fix_high</span>
+              Format entry
+            </button>
+            <button class="px-8 py-2.5 border border-outline-variant text-on-surface-variant font-label-caps text-xs rounded-sm hover:bg-surface-variant active:scale-95 transition-all ghost" id="clear" type="button">
+              Clear
+            </button>
+            <span id="status" class="status self-center font-data-mono text-xs text-on-surface-variant"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Draft Card (injected by app.js) -->
+      <section id="draft" class="draft hidden" hidden></section>
+
+      <div class="w-full h-px bg-outline-variant/30"></div>
+
+      <!-- Logbook History Area (Below Capture) -->
+      <section class="flex flex-col gap-6 pb-20 log">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 log-head">
+          <div class="flex items-center gap-6">
+            <h2 class="font-label-caps text-xs tracking-[0.3em] text-on-surface-variant uppercase">Logbook</h2>
+            <div class="relative min-w-[320px]">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+              <input id="search" class="w-full bg-surface-container-high border border-outline-variant rounded-sm pl-10 pr-4 py-2 text-xs font-data-mono focus:border-primary-fixed focus:ring-0 placeholder:text-on-surface-variant/40" placeholder="Search tail number, work, parts..." type="search"/>
+            </div>
+          </div>
+          <div class="flex gap-6">
+            <a id="exportTxt" class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary-fixed transition-colors border-b border-outline-variant/30 pb-0.5" href="/api/export?format=txt">Export .txt</a>
+            <a id="exportCsv" class="font-label-caps text-[10px] text-on-surface-variant hover:text-primary-fixed transition-colors border-b border-outline-variant/30 pb-0.5" href="/api/export?format=csv">Export .csv</a>
+          </div>
+        </div>
+
+        <!-- History Content -->
+        <div class="w-full entries" id="entries">
+          <!-- Placeholder State -->
+          <div class="empty flex flex-col items-center justify-center py-24 bg-surface-container-low/20 rounded border border-dashed border-outline-variant/50">
+            <span class="material-symbols-outlined text-outline-variant/30 text-5xl mb-6">history_edu</span>
+            <p class="text-on-surface-variant/50 font-data-mono text-xs uppercase tracking-widest">No entries yet. Hold the mic and describe what you did.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
